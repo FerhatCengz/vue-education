@@ -1,23 +1,19 @@
 <template>
-  <ul v-for="(data) in response" :key="data.id">
-    <li>{{ data.id }}</li>
-    <li>{{ data.title }}</li>
-    <li>{{ data.completed }}</li>
-    <li>{{ data.userId }}</li>
-  </ul>
+  <div>
+    <ul>
+      <li v-for="todos in todoStore.todos" :key="todos.id">
+        {{ todos.title }}
+      </li>
+    </ul>
+  </div>
 </template>
 
-
 <script setup lang="ts">
-import { useFetch } from '@/composables/useFetch'
-import type { ITodo } from '@/models/ITodo'
+import { useStores } from '@/stores'
 
+const { createTodoStore } = useStores()
 
-const { response } = useFetch<ITodo[]>('/posts')
-
-
+const todoStore = createTodoStore()
 
 
 </script>
-
-
