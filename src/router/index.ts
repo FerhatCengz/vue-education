@@ -8,14 +8,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: {
-        title: 'Admin'
-      },
-      beforeEnter: (to, from, next) => {
-        if (to.query.name === 'admin') {
-          next()
-        }
-      }
     },
     {
       path: '/about/:id',

@@ -15,8 +15,10 @@
   "dependencies": {
     "@formkit/themes": "^1.6.2",
     "@formkit/vue": "^1.6.2",
+    "@vueuse/core": "^10.9.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
+    "vue-demi": "^0.14.7",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

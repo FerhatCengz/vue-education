@@ -1,25 +1,23 @@
 <template>
-  <h1>Home</h1>
-
-  <button @click="toAbout">Hakkımdaya git</button>
-
+  <ul v-for="(data) in response" :key="data.id">
+    <li>{{ data.id }}</li>
+    <li>{{ data.title }}</li>
+    <li>{{ data.completed }}</li>
+    <li>{{ data.userId }}</li>
+  </ul>
 </template>
 
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-//routerden gelen meta içinde ki titlei alıp tarayıcıda title olarak gösterir
-document.title = router.currentRoute.value.meta.title as string
+import { useFetch } from '@/composables/useFetch'
+import type { ITodo } from '@/models/ITodo'
 
 
-const toAbout = () => {
-  // router.push({ path: '/about', query: { name: 'Ahmet' } })
+const { response } = useFetch<ITodo[]>('/posts')
 
-  // id değeri 2 olan about sayfasına git ":id" şeklinde
-  router.push({ name: 'about', params: { id: 2 } })
-}
+
+
 
 </script>
+
+
