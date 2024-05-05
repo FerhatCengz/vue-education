@@ -1,5 +1,5 @@
 <template>
-  <auto-search />
+  <auto-search/>
 </template>
 
 <script setup lang="ts">
