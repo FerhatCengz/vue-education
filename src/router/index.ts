@@ -12,7 +12,8 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        isAuthRequired: true
+        isAuthRequired: true,
+        layout: 'NavbarLayout'
       }
     },
     {
@@ -26,7 +27,8 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
       meta: {
-        isAuthRequired: true
+        isAuthRequired: true,
+        layout: 'NavbarLayout'
       }
     },
     {
@@ -34,13 +36,18 @@ const router = createRouter({
       name: 'test',
       component: () => import('../views/TestView.vue'),
       meta: {
-        isAuthRequired: true
+        isAuthRequired: true,
+        layout: 'NavbarLayout'
       }
     },
     {
       name: 'login',
       path: '/login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      meta: {
+        layout: 'LoginLayout'
+      }
+
     }
   ]
 })

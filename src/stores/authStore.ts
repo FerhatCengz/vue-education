@@ -17,9 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
     return await authManager.isAuthenticatedAsync()
   }
 
-  onMounted(async () => {
-    await isAuthAsync()
-  })
+
 
 
   return {

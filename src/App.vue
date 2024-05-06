@@ -1,90 +1,29 @@
 <template>
-  <a-layout v-if="route.name !== 'login'">
-    <a-layout-header :trigger="null" collapsible>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal">
-        <a-menu-item key="home">
-          <user-outlined />
-          <span>
-            <router-link to="/">Home</router-link>
-          </span>
-        </a-menu-item>
-        <a-menu-item key="about">
-          <video-camera-outlined />
-          <span>
-            <router-link to="/about/2">About</router-link>
-          </span>
-        </a-menu-item>
-        <a-menu-item key="test">
-          <upload-outlined />
-          <span>
-            <router-link to="/test">Test</router-link>
-          </span>
-        </a-menu-item>
-
-        <a-menu-item @click="logOut">
-          <upload-outlined />
-          <span>
-            Log Out
-          </span>
-        </a-menu-item>
-      </a-menu>
-    </a-layout-header>
-  </a-layout>
-
-  <RouterView></RouterView>
-
-
+  <component :is="layout"></component>
 </template>
-<script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
 
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined
-} from '@ant-design/icons-vue'
+<script setup lang="ts">
 
+import { useRoute } from 'vue-router'
+import NavbarLayout from '@/views/layouts/NavbarLayout.vue'
+import LoginLayout from '@/views/layouts/LoginLayout.vue'
+import { ref, watch, markRaw } from 'vue'
 
-const router = useRouter()
 const route = useRoute()
-const authStore = useAuthStore()
-const logOut = async () => {
-  await authStore.logOut()
-  await router.push({ name: 'login' })
-}
 
-const selectedKeys = ref<string[]>([route.name as string])
+const layout = ref<any>()
 
-watch(route, () => {
-  selectedKeys.value = [route.name as string]
+
+watch(() => route.meta.layout, (value) => {
+  console.log(value)
+  switch (value) {
+    case 'NavbarLayout':
+      layout.value = markRaw(NavbarLayout)
+      break
+    default:
+      layout.value = markRaw(LoginLayout)
+  }
 })
 
 
 </script>
-
-
-<style>
-#components-layout-demo-custom-trigger .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-#components-layout-demo-custom-trigger .trigger:hover {
-  color: #1890ff;
-}
-
-#components-layout-demo-custom-trigger .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.3);
-  margin: 16px;
-}
-
-.site-layout .site-layout-background {
-  background: #fff;
-}
-</style>
