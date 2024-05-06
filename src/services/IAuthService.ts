@@ -6,7 +6,7 @@ export interface IAuthService {
 
   logoutAsync(): Promise<boolean>;
 
-  isAuthenticated(): boolean;
+  isAuthenticatedAsync(): Promise<boolean>;
 
   getUser(): IUserLogin | null;
 

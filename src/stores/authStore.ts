@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import authManager from '@/services/AuthManager'
+import authManager from '@/services/SupaBaseAuthManager'
+import { onMounted } from 'vue'
 
 
 export const useAuthStore = defineStore('auth', () => {
@@ -12,10 +13,19 @@ export const useAuthStore = defineStore('auth', () => {
     return await authManager.logoutAsync()
   }
 
+  const isAuthAsync = async (): Promise<boolean> => {
+    return await authManager.isAuthenticatedAsync()
+  }
+
+  onMounted(async () => {
+    await isAuthAsync()
+  })
+
 
   return {
     getUser,
     loginAsync,
-    logOut
+    logOut,
+    isAuthAsync
   }
 })

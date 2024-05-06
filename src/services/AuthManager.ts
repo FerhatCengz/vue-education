@@ -6,6 +6,7 @@ const StorageKey = {
   IS_AUTH: 'isAuth'
 }
 
+
 class AuthManager implements IAuthService {
   async loginAsync(username: string, password: string): Promise<boolean> {
     if (username === 'admin' && password === 'admin') {
@@ -23,14 +24,13 @@ class AuthManager implements IAuthService {
     return Promise.resolve(true)
   }
 
-  isAuthenticated(): boolean {
-    return JSON.parse(localStorage.getItem(StorageKey.IS_AUTH) || 'false')
+  isAuthenticatedAsync(): Promise<boolean> {
+    return Promise.resolve(localStorage.getItem(StorageKey.IS_AUTH) !== null)
   }
 
   getUser(): IUserLogin | null {
     return JSON.parse(localStorage.getItem(StorageKey.USER) || 'null')
   }
 }
-
 
 export default new AuthManager()

@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useAuthStore } from '@/stores/authStore'
+import supaBase from '@/plugins/supaBase'
 
 
 const router = createRouter({
@@ -44,14 +45,20 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-    const isAuth: boolean = JSON.parse(localStorage.getItem('isAuth') || 'false')
-    if (to.meta.isAuthRequired && !isAuth) {
-      next({ name: 'login', query: { auth: 'error' } })
-    }
-    next()
-  }
-)
+// router.beforeEach((to, from, next) => {
+//     const isAuth: boolean = JSON.parse(localStorage.getItem('isAuth') || 'false')
+//     if (to.meta.isAuthRequired && !isAuth) {
+//       next({ name: 'login', query: { auth: 'error' } })
+//     }
+//     next()
+//   }
+// )
+
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore()
+  return !(to.meta.isAuthRequired && !await authStore.isAuthAsync())
+
+})
 
 
 export default router
