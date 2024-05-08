@@ -28,13 +28,11 @@ export const useAuthStore = defineStore('auth', () => {
       throw new Error(error.message)
     }
     return {
-      id: data?.user?.id.toString()
+      id: data?.user?.id.toString(),
+      mail: data?.user?.email
     } as IUser
 
   }
-
-
-
 
 
   return {
@@ -42,7 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
     getAuthUserAsync,
     loginAsync,
     logOut,
-    isAuthAsync,
+    isAuthAsync
 
   }
 })

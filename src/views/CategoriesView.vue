@@ -8,6 +8,7 @@ import type { Cart } from '@/models/Cart'
 import { useAuthStore } from '@/stores/authStore'
 import { useStores } from '@/stores'
 import { message } from 'ant-design-vue'
+import type { IUser } from '@/models/IUser'
 
 const route = useRoute()
 const products = ref<Product[]>([])
@@ -19,6 +20,7 @@ const cartRepository = new SupabaseRepository<Cart>('carts')
 const authStore = useAuthStore()
 const { createCartStore } = useStores()
 const cartStore = createCartStore()
+const user = ref<IUser>()
 
 const disabled = ref(false)
 const addBasket = async (product: Product) => {
@@ -83,7 +85,13 @@ watch(() => route.params.id, () => {
 onMounted(() => {
   getProductWithCategory()
   getCategoryId(Number(route.params.id))
+  authStore.getAuthUserAsync().then((data) => {
+    user.value = data
+  })
   loading.value = false
+
+
+  console.log('user => ', user.value)
 
 
 })
@@ -116,7 +124,10 @@ onMounted(() => {
 
           <template #actions>
 
-            <a-button :disabled="disabled" @click="addBasket(product)" type="primary">Sepete Ekle</a-button>
+            <a-button v-if="user" :disabled="disabled" @click="addBasket(product)" type="primary">
+              Sepete Ekle
+            </a-button>
+
           </template>
           <a-card-meta :title="product.title">
             <template #description>

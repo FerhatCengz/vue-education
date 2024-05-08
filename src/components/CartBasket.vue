@@ -14,8 +14,6 @@
 
     <a-card style="margin-top: 30px" v-for="item in cartStore.cartWithProductCartAllData" :title="item.product_name"
             :key="item.id">
-
-
       <a-card-grid style="width: 50%; text-align: center">
         <a-badge :count="item.count" :number-style="{ backgroundColor: '#52c41a' }">
           <a-image

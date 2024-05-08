@@ -12,7 +12,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        isAuthRequired: true,
+        isAuthRequired: false,
         layout: 'NavbarLayout'
       }
     },
@@ -82,7 +82,11 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
-  return !(to.meta.isAuthRequired && !await authStore.isAuthAsync())
+  // beni logine yönlendir
+  // return !(to.meta.isAuthRequired && !await authStore.isAuthAsync())
+  if (to.meta.isAuthRequired && !await authStore.isAuthAsync()) {
+    return { name: 'login', query: { auth: 'error' } }
+  }
 
 })
 
