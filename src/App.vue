@@ -7,7 +7,8 @@
 import { useRoute } from 'vue-router'
 import NavbarLayout from '@/views/layouts/NavbarLayout.vue'
 import LoginLayout from '@/views/layouts/LoginLayout.vue'
-import { ref, watch, markRaw } from 'vue'
+import { ref, watch, markRaw, onMounted } from 'vue'
+import supabaseClient from '@/plugins/supaBase'
 
 const route = useRoute()
 
@@ -25,5 +26,10 @@ watch(() => route.meta.layout, (value) => {
   }
 })
 
+
+onMounted(async () => {
+  // const { data } = await supabaseClient.from('products').select()
+  // console.log(data)
+})
 
 </script>

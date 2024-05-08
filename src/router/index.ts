@@ -47,8 +47,27 @@ const router = createRouter({
       meta: {
         layout: 'LoginLayout'
       }
+    },
 
+    {
+      name: 'categories',
+      path: '/categories/:id(\\d+)',
+      component: () => import('../views/CategoriesView.vue'),
+      meta: {
+        isAuthRequired: false,
+        layout: 'NavbarLayout'
+      }
+    },
+    {
+      name: 'cart',
+      path: '/cart',
+      component: () => import('../views/CartView.vue'),
+      meta: {
+        isAuthRequired: true,
+        layout: 'NavbarLayout'
+      }
     }
+
   ]
 })
 

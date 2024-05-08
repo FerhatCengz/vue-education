@@ -1,90 +1,85 @@
 <template>
-  <a-layout>
-    <a-layout-header :trigger="null" collapsible>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal">
-        <a-menu-item key="home">
-          <user-outlined />
-          <span>
-            <router-link to="/">Home</router-link>
-          </span>
-        </a-menu-item>
-        <a-menu-item key="about">
-          <video-camera-outlined />
-          <span>
-            <router-link to="/about/2">About</router-link>
-          </span>
-        </a-menu-item>
-        <a-menu-item key="test">
-          <upload-outlined />
-          <span>
-            <router-link to="/test">Test</router-link>
-          </span>
-        </a-menu-item>
 
-        <a-menu-item @click="logOut">
-          <upload-outlined />
-          <span>
-            Log Out
-          </span>
-        </a-menu-item>
+  <a-layout>
+    <a-layout-sider
+      breakpoint="lg"
+      collapsed-width="0"
+      style="height: 100vh"
+    >
+      <div class="logo">
+        <h1>FC SHOP</h1>
+      </div>
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+        <a-spin :spinning="categories.length < 1">
+          <a-menu-item v-for="category in categories" :key="category.id">
+            <router-link :to="'/categories/'+category.id">{{ category.title }}</router-link>
+          </a-menu-item>
+        </a-spin>
       </a-menu>
-    </a-layout-header>
+    </a-layout-sider>
+    <a-layout>
+      <a-layout-header :style="{ background: '#fff', padding: 0 , 'text-align' : 'right' }">
+        <shopping-cart-outlined @click="open = !open" style="font-size: 22px;margin-right: 20px;cursor: pointer;" />
+      </a-layout-header>
+      <a-layout-content :style="{ margin: '24px 16px 0' }">
+        <router-view></router-view>
+      </a-layout-content>
+      <a-layout-footer style="text-align: center">
+        FC SHOP ©2024
+      </a-layout-footer>
+    </a-layout>
   </a-layout>
 
-  <RouterView></RouterView>
-
+  <cart-draw :open="open" @on-close="open = false"></cart-draw>
 
 </template>
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
+const open = ref<boolean>(false)
 
+
+import { defineAsyncComponent, onMounted, reactive, ref } from 'vue'
+const cartDraw = defineAsyncComponent(() => import('@/components/CartDraw.vue'))
+
+import { SupabaseRepository } from '@/repository/SupabaseRepository'
+import Category from '@/models/Category'
 import {
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined
+  ShoppingCartOutlined
 } from '@ant-design/icons-vue'
 
+const selectedKeys = ref<string[]>(['1'])
+const categories = reactive<Category[]>([])
 
-const router = useRouter()
-const route = useRoute()
-const authStore = useAuthStore()
-const logOut = async () => {
-  await authStore.logOut()
-  await router.push({ name: 'login' })
-}
 
-const selectedKeys = ref<string[]>([route.name as string])
 
-watch(route, () => {
-  selectedKeys.value = [route.name as string]
+
+onMounted(async () => {
+  const categoryRepo = new SupabaseRepository<Category>('categories')
+  const response = await categoryRepo.getAllAsync()
+  categories.push(...response)
 })
 
 
 </script>
 
 
-<style>
-#components-layout-demo-custom-trigger .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-#components-layout-demo-custom-trigger .trigger:hover {
-  color: #1890ff;
-}
-
-#components-layout-demo-custom-trigger .logo {
+<style scoped>
+.logo {
   height: 32px;
-  background: rgba(255, 255, 255, 0.3);
   margin: 16px;
+  color: white;
+  font-size: 20px;
+  text-align: center;
 }
 
-.site-layout .site-layout-background {
+.site-layout-sub-header-background {
   background: #fff;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+[data-theme='dark'] .site-layout-sub-header-background {
+  background: #141414;
 }
 </style>
